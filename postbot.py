@@ -1,16 +1,21 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+import os
+import praw
+import inquirer
+from dotenv import load_dotenv
+load_dotenv()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+reddit = praw.Reddit(
+    client_id=os.environ['REDDIT_CLIENT_ID'],
+    client_secret=os.environ['REDDIT_SECRET'],
+    password=os.environ['REDDIT_PW'],
+    user_agent='localscript:aunty-games-postbot:0.0.1 (by /u/auntygames)',
+    username="auntygames",
+)
+subreddit_name = 'test'
+subreddit = reddit.subreddit(subreddit_name)
+subreddit.submit_image(
+    title='my title',
+    image_path='/Users/game/Desktop/weird_img.png',
+    without_websockets=True
+)
