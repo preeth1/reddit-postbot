@@ -2,16 +2,22 @@ import os
 import praw
 import inquirer
 import webbrowser
+from time import sleep
+from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 
 
-UNPOSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/Gifs/unposted'
-POSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/Gifs/posted'
-SUBREDDIT_NAMES = ['test']
+UNPOSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/unposted'
+POSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/posted'
+SUBREDDIT_NAMES = ['auntygames']
 
+available_files_to_post = []
+for filename in os.listdir(UNPOSTED_DIR):
+    if Path(filename).suffix == '.gif':
+        available_files_to_post.append(filename)
 questions = [
-    inquirer.List('gif_filename', message="Gif to upload:", choices=os.listdir(UNPOSTED_DIR)),
+    inquirer.List('gif_filename', message="Gif to upload:", choices=available_files_to_post),
     inquirer.Text('post_title', message="Post title:"),
 ]
 answers = inquirer.prompt(questions)
