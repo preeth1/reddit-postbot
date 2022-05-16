@@ -50,3 +50,11 @@ sleep(5)
 
 browser = webbrowser.get('chrome')
 browser.open('https://www.reddit.com/user/auntygames/posts/', new=0, autoraise=True)
+
+user = reddit.redditor('auntygames')
+just_posted_submissions = []
+for submission in user.submissions.new():
+    if submission.title == answers['post_title']:
+        just_posted_submissions.append(submission)
+        submission.reply(body="it's just me working on this project so I would love feedback! \n"
+                              "✨ demo: https://aunty-games.itch.io/mystic-village")
