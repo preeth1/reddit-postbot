@@ -1,5 +1,6 @@
 import os
 import praw
+import tweepy
 import inquirer
 import webbrowser
 from time import sleep
@@ -12,6 +13,8 @@ UNPOSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs
 POSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/posted'
 SUBREDDIT_NAMES = ['u_auntygames', 'godot', 'indiegames', 'PixelArt']
 
+
+# FILL OUT CLI PROMPTS
 available_files_to_post = []
 for filename in os.listdir(UNPOSTED_DIR):
     if Path(filename).suffix == '.gif':
@@ -22,6 +25,26 @@ questions = [
 ]
 answers = inquirer.prompt(questions)
 
+
+# POST TO TWITTER
+input('About to post to twitter. Press any key to continue!')
+
+auth = tweepy.OAuth1UserHandler(
+    consumer_key=os.environ['TWITTER_API_KEY'],
+    consumer_secret=os.environ['TWITTER_API_SECRET'],
+    access_token=os.environ['TWITTER_ACCESS_TOKEN'],
+    access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
+)
+api = tweepy.API(auth)
+post_title = answers['post_title']
+unposted_gif_path = os.path.join(UNPOSTED_DIR, answers['gif_filename'])
+upload_response = api.media_upload(unposted_gif_path)
+api.update_status(status=post_title, media_ids=[upload_response.media_id_string])
+
+
+# POST TO REDDIT
+input(f'About to post to the following subs: {SUBREDDIT_NAMES}. Press any key to continue! ')
+
 reddit = praw.Reddit(
     client_id=os.environ['REDDIT_CLIENT_ID'],
     client_secret=os.environ['REDDIT_SECRET'],
@@ -30,20 +53,14 @@ reddit = praw.Reddit(
     username="auntygames",
 )
 
-input(f'About to post to the following subs: {SUBREDDIT_NAMES}. Press any key to continue! ')
-
 for sub_name in SUBREDDIT_NAMES:
     print(f'Posting to sub: {sub_name}')
     subreddit = reddit.subreddit(sub_name)
-    unposted_gif_path = os.path.join(UNPOSTED_DIR, answers['gif_filename'])
     subreddit.submit_image(
-        title=answers['post_title'],
+        title=post_title,
         image_path=unposted_gif_path,
         without_websockets=True
     )
-posted_gif_path = os.path.join(POSTED_DIR, answers['gif_filename'])
-print(f'Moving file to: {posted_gif_path}')
-os.rename(unposted_gif_path, posted_gif_path)
 
 print('Opening up posts in chrome shortly...')
 sleep(5)
@@ -56,3 +73,8 @@ for submission in user.submissions.new():
     if submission.title == answers['post_title']:
         submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
                               "✨ demo: https://aunty-games.itch.io/mystic-village")
+
+# MOVE FILE TO UNPOSTED DIR
+posted_gif_path = os.path.join(POSTED_DIR, answers['gif_filename'])
+print(f'Moving file to: {posted_gif_path}')
+os.rename(unposted_gif_path, posted_gif_path)
