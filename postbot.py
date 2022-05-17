@@ -11,7 +11,12 @@ load_dotenv()
 
 UNPOSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/unposted'
 POSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/posted'
-SUBREDDIT_NAMES = ['u_auntygames', 'godot', 'indiegames', 'PixelArt']
+SUBREDDIT_DETAILS = [
+    {'name': 'u_auntygames', 'flair_text': None},
+    {'name': 'godot', 'flair_text': 'Picture/Video'},
+    {'name': 'indiegames', 'flair_text': 'Gif'},
+    {'name': 'PixelArt', 'flair_text': 'Hand Pixelled'}
+]
 
 
 # FILL OUT CLI PROMPTS
@@ -44,7 +49,7 @@ api.update_status(status=post_title + hashtags, media_ids=[upload_response.media
 
 
 # POST TO REDDIT
-input(f'About to post to the following subs: {SUBREDDIT_NAMES}. Press any key to continue! ')
+input(f'About to post to the following subs: {[x["name"] for x in SUBREDDIT_DETAILS]}. Press any key to continue! ')
 
 reddit = praw.Reddit(
     client_id=os.environ['REDDIT_CLIENT_ID'],
@@ -54,18 +59,25 @@ reddit = praw.Reddit(
     username="auntygames",
 )
 
-for sub_name in SUBREDDIT_NAMES:
+for entry in SUBREDDIT_DETAILS:
+    sub_name = entry['name']
     print(f'Posting to sub: {sub_name}')
     subreddit = reddit.subreddit(sub_name)
+    flair_id = None
+    for flair_details in list(subreddit.flair.link_templates.user_selectable()):
+        if flair_details['flair_text'] == entry['flair_text']:
+            flair_id = flair_details['flair_template_id']
+
     subreddit.submit_image(
         title=post_title,
         image_path=unposted_gif_path,
-        without_websockets=True
+        without_websockets=True,
+        flair_id=flair_id
     )
 
 user = reddit.redditor('auntygames')
 for submission in user.submissions.new():
-    if submission.title == answers['post_title']:
+    if submission.title == post_title:
         submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
                               "✨ demo: https://aunty-games.itch.io/mystic-village")
 
