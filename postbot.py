@@ -39,7 +39,8 @@ api = tweepy.API(auth)
 post_title = answers['post_title']
 unposted_gif_path = os.path.join(UNPOSTED_DIR, answers['gif_filename'])
 upload_response = api.media_upload(unposted_gif_path)
-api.update_status(status=post_title, media_ids=[upload_response.media_id_string])
+hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine'
+api.update_status(status=post_title + hashtags, media_ids=[upload_response.media_id_string])
 
 
 # POST TO REDDIT
