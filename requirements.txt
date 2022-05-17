@@ -3,3 +3,4 @@ python-dotenv==0.20.0
 cloudinary==1.29.0
 inquirer==2.9.2
 tweepy==4.9.0
+opencv-python==4.5.5.64
