@@ -22,7 +22,7 @@ SUBREDDIT_DETAILS = [
 # FILL OUT CLI PROMPTS
 available_files_to_post = []
 for filename in os.listdir(UNPOSTED_DIR):
-    if Path(filename).suffix == '.gif':
+    if Path(filename).suffix == '.mov':
         available_files_to_post.append(filename)
 questions = [
     inquirer.List('gif_filename', message="Gif to upload", choices=available_files_to_post),
