@@ -14,7 +14,7 @@ POSTED_DIR = '/Volumes/GoogleDrive/My Drive/mystic_village/Marketing/game_gifs/p
 SUBREDDIT_DETAILS = [
     {'name': 'u_auntygames', 'flair_text': None},
     {'name': 'godot', 'flair_text': 'Picture/Video'},
-    {'name': 'indiegames', 'flair_text': 'Gif'},
+    {'name': 'indiegames', 'flair_text': 'Video'},
     {'name': 'PixelArt', 'flair_text': 'Hand Pixelled'}
 ]
 
@@ -25,12 +25,12 @@ for filename in os.listdir(UNPOSTED_DIR):
     if Path(filename).suffix == '.mov':
         available_files_to_post.append(filename)
 questions = [
-    inquirer.List('gif_filename', message="Gif to upload", choices=available_files_to_post),
+    inquirer.List('vid_filename', message="Video to upload", choices=available_files_to_post),
     inquirer.Text('post_title', message="Post title"),
 ]
 answers = inquirer.prompt(questions)
 post_title = answers['post_title']
-unposted_gif_path = os.path.join(UNPOSTED_DIR, answers['gif_filename'])
+unposted_vid_path = os.path.join(UNPOSTED_DIR, answers['vid_filename'])
 
 
 # POST TO TWITTER
@@ -43,7 +43,7 @@ auth = tweepy.OAuth1UserHandler(
     access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
 )
 api = tweepy.API(auth)
-upload_response = api.media_upload(unposted_gif_path)
+upload_response = api.media_upload(unposted_vid_path)
 hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine'
 api.update_status(status=post_title + hashtags, media_ids=[upload_response.media_id_string])
 
@@ -68,9 +68,9 @@ for entry in SUBREDDIT_DETAILS:
         if flair_details['flair_text'] == entry['flair_text']:
             flair_id = flair_details['flair_template_id']
 
-    subreddit.submit_image(
+    subreddit.submit_video(
         title=post_title,
-        image_path=unposted_gif_path,
+        video_path=unposted_vid_path,
         without_websockets=True,
         flair_id=flair_id
     )
@@ -91,6 +91,6 @@ browser.open('https://www.reddit.com/user/auntygames/posts/', new=0, autoraise=T
 browser.open('https://twitter.com/AuntyGames/', new=1, autoraise=True)
 
 # MOVE FILE TO UNPOSTED DIR
-posted_gif_path = os.path.join(POSTED_DIR, answers['gif_filename'])
-print(f'Moving file to: {posted_gif_path}')
-os.rename(unposted_gif_path, posted_gif_path)
+posted_vid_path = os.path.join(POSTED_DIR, answers['vid_filename'])
+print(f'Moving file to: {posted_vid_path}')
+os.rename(unposted_vid_path, posted_vid_path)
