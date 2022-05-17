@@ -63,17 +63,20 @@ for sub_name in SUBREDDIT_NAMES:
         without_websockets=True
     )
 
-print('Opening up posts in chrome shortly...')
-sleep(5)
-
-browser = webbrowser.get('chrome')
-browser.open('https://www.reddit.com/user/auntygames/posts/', new=0, autoraise=True)
-
 user = reddit.redditor('auntygames')
 for submission in user.submissions.new():
     if submission.title == answers['post_title']:
         submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
                               "✨ demo: https://aunty-games.itch.io/mystic-village")
+
+
+# OPEN UP POSTS IN CHROME
+print('Opening up posts in chrome shortly...')
+sleep(2)
+
+browser = webbrowser.get('chrome')
+browser.open('https://www.reddit.com/user/auntygames/posts/', new=0, autoraise=True)
+browser.open('https://twitter.com/AuntyGames/', new=1, autoraise=True)
 
 # MOVE FILE TO UNPOSTED DIR
 posted_gif_path = os.path.join(POSTED_DIR, answers['gif_filename'])
