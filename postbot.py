@@ -88,6 +88,7 @@ for submission in user.submissions.new():
     if submission.title == post_title:
         submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
                               "✨ demo: https://aunty-games.itch.io/mystic-village")
+        print('Adding comment to reddit post')
 
 
 # OPEN UP POSTS IN CHROME
