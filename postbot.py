@@ -39,7 +39,7 @@ unposted_vid_path = os.path.join(UNPOSTED_DIR, answers['vid_filename'])
 
 # POST TO TWITTER
 input('About to post to twitter. Press any key to continue!')
-
+print('🎥 Posting to twitter...')
 auth = tweepy.OAuth1UserHandler(
     consumer_key=os.environ['TWITTER_API_KEY'],
     consumer_secret=os.environ['TWITTER_API_SECRET'],
@@ -50,7 +50,6 @@ api = tweepy.API(auth)
 upload_response = api.media_upload(unposted_vid_path)
 hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine'
 api.update_status(status=post_title + hashtags, media_ids=[upload_response.media_id_string])
-
 
 # POST TO REDDIT
 input(f'About to post to the following subs: {[x["name"] for x in SUBREDDIT_DETAILS]}. Press any key to continue! ')
@@ -65,7 +64,7 @@ reddit = praw.Reddit(
 
 for entry in SUBREDDIT_DETAILS:
     sub_name = entry['name']
-    print(f'Posting to sub: {sub_name}')
+    print(f'🎥 Posting to sub: {sub_name}...')
     subreddit = reddit.subreddit(sub_name)
     flair_id = None
     for flair_details in list(subreddit.flair.link_templates.user_selectable()):
@@ -84,15 +83,19 @@ for entry in SUBREDDIT_DETAILS:
         )
 
 user = reddit.redditor('auntygames')
-for submission in user.submissions.new():
-    if submission.title == post_title:
-        submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
-                              "✨ demo: https://aunty-games.itch.io/mystic-village")
-        print('Adding comment to reddit post')
+num_commented_subs = 0
+print('⏰ Waiting for the videos to become available, then adding comments...')
+while num_commented_subs < len(SUBREDDIT_DETAILS):
+    for submission in user.submissions.new():
+        if submission.title == post_title:
+            submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
+                                  "✨ demo: https://aunty-games.itch.io/mystic-village")
+            print('✏️ Added comment to reddit post')
+            num_commented_subs += 1
 
 
 # OPEN UP POSTS IN CHROME
-print('Opening up posts in chrome shortly...')
+print('🌐 Opening up posts in chrome shortly...')
 sleep(2)
 
 browser = webbrowser.get('chrome')
@@ -101,5 +104,6 @@ browser.open('https://twitter.com/AuntyGames/', new=1, autoraise=True)
 
 # MOVE FILE TO UNPOSTED DIR
 posted_vid_path = os.path.join(POSTED_DIR, answers['vid_filename'])
-print(f'Moving file to: {posted_vid_path}')
+print(f'👟 Moving file to: {posted_vid_path}')
 os.rename(unposted_vid_path, posted_vid_path)
+print('✨ All done!')
