@@ -85,7 +85,8 @@ for entry in SUBREDDIT_DETAILS:
 user = reddit.redditor('auntygames')
 num_commented_subs = 0
 print('⏰ Waiting for the videos to become available, then adding comments...')
-while num_commented_subs < len(SUBREDDIT_DETAILS):
+while num_commented_subs <= len(SUBREDDIT_DETAILS):
+    sleep(2)
     for submission in user.submissions.new():
         if submission.title == post_title:
             submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
