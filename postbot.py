@@ -88,16 +88,17 @@ for entry in SUBREDDIT_DETAILS:
         )
 
 user = reddit.redditor('auntygames')
-num_commented_subs = 0
+commented_on_subs = []
 print('⏰ Waiting for the videos to become available, then adding comments...')
-while num_commented_subs <= len(SUBREDDIT_DETAILS):
+while len(commented_on_subs) <= len(SUBREDDIT_DETAILS):
     sleep(2)
     for submission in user.submissions.new():
         if submission.title == post_title:
-            submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
-                                  "✨ demo: https://aunty-games.itch.io/mystic-village")
-            print('✏️ Added comment to reddit post')
-            num_commented_subs += 1
+            if submission.subreddit.name not in commented_on_subs:
+                submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
+                                      "✨ demo: https://aunty-games.itch.io/mystic-village")
+                print(f'✏️ Added comment to reddit post in sub {submission.subreddit.name}')
+                commented_on_subs.append(submission.subreddit.name)
 
 
 # OPEN UP POSTS IN CHROME
