@@ -39,7 +39,7 @@ unposted_vid_path = os.path.join(UNPOSTED_DIR, answers['vid_filename'])
 
 # POST TO TWITTER
 input('About to post to twitter. Press any key to continue!')
-print('🎥 Posting to twitter...')
+print('🎬 Posting to twitter...')
 auth = tweepy.OAuth1UserHandler(
     consumer_key=os.environ['TWITTER_API_KEY'],
     consumer_secret=os.environ['TWITTER_API_SECRET'],
@@ -64,7 +64,7 @@ reddit = praw.Reddit(
 
 for entry in SUBREDDIT_DETAILS:
     sub_name = entry['name']
-    print(f'🎥 Posting to sub: {sub_name}...')
+    print(f'🎬 Posting to sub: {sub_name}...')
     subreddit = reddit.subreddit(sub_name)
     flair_id = None
     for flair_details in list(subreddit.flair.link_templates.user_selectable()):
