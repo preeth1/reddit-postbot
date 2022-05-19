@@ -47,9 +47,14 @@ auth = tweepy.OAuth1UserHandler(
     access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
 )
 api = tweepy.API(auth)
-upload_response = api.media_upload(unposted_vid_path)
-hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine'
-api.update_status(status=post_title + hashtags, media_ids=[upload_response.media_id_string])
+try:
+    upload_response = api.media_upload(unposted_vid_path)
+    hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine'
+    api.update_status(status=post_title + hashtags, media_ids=[upload_response.media_id_string])
+except Exception as e:
+    print('😬 Twitter post didn\'t work. Going to open up a browser now so you can do it manually.')
+    browser = webbrowser.get('chrome')
+    browser.open('https://twitter.com/compose/tweet', new=0, autoraise=True)
 
 # POST TO REDDIT
 input(f'About to post to the following subs: {[x["name"] for x in SUBREDDIT_DETAILS]}. Press any key to continue! ')
