@@ -19,7 +19,9 @@ SUBREDDIT_DETAILS = [
     {'name': 'u_auntygames', 'flair_text': None},
     {'name': 'godot', 'flair_text': 'Picture/Video'},
     {'name': 'indiegames', 'flair_text': 'Video'},
-    {'name': 'PixelArt', 'flair_text': 'Hand Pixelled'}
+    {'name': 'PixelArt', 'flair_text': 'Hand Pixelled'},
+    {'name': 'IndieGaming', 'flair_text': None},
+    {'name': 'IndieDev', 'flair_text': 'Video'},
 ]
 
 
