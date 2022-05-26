@@ -92,7 +92,7 @@ for entry in SUBREDDIT_DETAILS:
 user = reddit.redditor('auntygames')
 commented_on_subs = []
 print('⏰ Waiting for the videos to become available, then adding comments...')
-while len(commented_on_subs) <= len(SUBREDDIT_DETAILS):
+while len(commented_on_subs) < len(SUBREDDIT_DETAILS):
     sleep(2)
     for submission in user.submissions.new():
         if submission.title == post_title:
