@@ -99,7 +99,7 @@ while len(commented_on_subs) < len(SUBREDDIT_DETAILS):
         if submission.title == post_title:
             if submission.subreddit.name not in commented_on_subs:
                 submission.reply(body="it's just me working on this project so I would love feedback! \n\n"
-                                      "✨ demo: https://aunty-games.itch.io/gourdlets")
+                                      "✨ demo (old version, I will release an update soon!): https://aunty-games.itch.io/gourdlets")
                 print(f'✏️ Added comment to reddit post in sub {submission.subreddit.name}')
                 commented_on_subs.append(submission.subreddit.name)
 
