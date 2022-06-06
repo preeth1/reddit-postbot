@@ -49,7 +49,7 @@ auth = tweepy.OAuth1UserHandler(
     access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
 )
 api = tweepy.API(auth)
-hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine' \
+hashtags = '\n\n #gamedev #IndieGameDev #pixelart #rpg #godotengine #isometric' \
            '\n\n demo: https://aunty-games.itch.io/gourdlets'
 try:
     upload_response = api.media_upload(unposted_vid_path)
